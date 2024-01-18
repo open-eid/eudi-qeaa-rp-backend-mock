@@ -48,3 +48,10 @@ management:
       enabled: true
     os:
       enabled: true
+
+eudi:
+  rp-backend:
+    base-url: https://eudi-rp-backend.localhost:15443
+    callback-url: https://eudi-rp.localhost:14443/presentation-callback
+    ttl:
+      request-uri: 60s
