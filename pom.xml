@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.2</version>
+        <version>3.3.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -20,18 +20,6 @@
         <spring-boot.build-image.builder>paketobuildpacks/builder-jammy-base:latest</spring-boot.build-image.builder>
         <spring-boot.build-image.imageName>${project.artifactId}:latest</spring-boot.build-image.imageName>
     </properties>
-
-    <repositories>
-        <repository>
-            <id>waltid</id>
-            <name>walt.id</name>
-            <url>https://maven.walt.id/repository/waltid/</url>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-            </snapshots>
-        </repository>
-    </repositories>
 
     <dependencies>
         <dependency>
@@ -69,7 +57,7 @@
         <dependency>
             <groupId>com.nimbusds</groupId>
             <artifactId>oauth2-oidc-sdk</artifactId>
-            <version>11.10</version>
+            <version>11.19</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -95,6 +83,9 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <docker>
+                        <host>//./pipe/dockerDesktopLinuxEngine</host>
+                    </docker>
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>
@@ -113,7 +104,7 @@
             <plugin>
                 <groupId>io.github.git-commit-id</groupId>
                 <artifactId>git-commit-id-maven-plugin</artifactId>
-                <version>7.0.0</version>
+                <version>9.0.1</version>
             </plugin>
         </plugins>
     </build>
