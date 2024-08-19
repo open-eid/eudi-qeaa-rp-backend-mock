@@ -3,6 +3,7 @@ package ee.ria.eudi.qeaa.rp.backend.model;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,6 +22,6 @@ public class Transaction {
     private String responseCode;
     @Embedded
     private RequestObject requestObject;
-    @Embedded
-    private ResponseObject responseObject;
+    @Lob
+    private String responseObject;
 }

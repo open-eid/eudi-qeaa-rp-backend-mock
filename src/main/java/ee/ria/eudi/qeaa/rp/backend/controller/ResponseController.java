@@ -2,7 +2,8 @@ package ee.ria.eudi.qeaa.rp.backend.controller;
 
 import ee.ria.eudi.qeaa.rp.backend.configuration.properties.RpBackendProperties;
 import ee.ria.eudi.qeaa.rp.backend.error.ServiceException;
-import ee.ria.eudi.qeaa.rp.backend.model.ResponseObject;
+import ee.ria.eudi.qeaa.rp.backend.controller.ResponseCodeResponse;
+import ee.ria.eudi.qeaa.rp.backend.controller.ResponseObjectResponse;
 import ee.ria.eudi.qeaa.rp.backend.model.Transaction;
 import ee.ria.eudi.qeaa.rp.backend.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,24 +23,20 @@ public class ResponseController {
     private final RpBackendProperties rpBackendProperties;
     private final TransactionRepository transactionRepository;
 
-    @PostMapping(path = RESPONSE_REQUEST_MAPPING, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseCodeResponse postResponseObject(@RequestParam(name = "vp_token") String vpToken,
-                                                   @RequestParam(name = "presentation_submission") String presentationSubmission,
+    @PostMapping(path = RESPONSE_REQUEST_MAPPING, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, params = "response")
+    public ResponseCodeResponse postResponseObject(@RequestParam(name = "response") String response,
                                                    @RequestParam(name = "state") String state) {
-        Transaction transaction = updateTransaction(vpToken, presentationSubmission, state);
+        Transaction transaction = updateTransaction(response, state);
         URI redirectUri = UriComponentsBuilder.fromUriString(rpBackendProperties.callbackUrl())
             .queryParam("response_code", transaction.getResponseCode())
             .build().toUri();
         return ResponseCodeResponse.builder().redirectUri(redirectUri).build();
     }
 
-    private Transaction updateTransaction(String vpToken, String presentationSubmission, String state) {
+    private Transaction updateTransaction(String response, String state) {
         Transaction transaction = transactionRepository.findByRequestObjectState(state)
             .orElseThrow(() -> new ServiceException("Invalid state"));
-        transaction.setResponseObject(ResponseObject.builder()
-            .vpToken(vpToken)
-            .presentationSubmission(presentationSubmission)
-            .build());
+        transaction.setResponseObject(response);
         transactionRepository.save(transaction);
         return transaction;
     }
@@ -51,8 +48,7 @@ public class ResponseController {
             .orElseThrow(() -> new ServiceException("Response Object not found"));
         transactionRepository.delete(transaction);
         return ResponseObjectResponse.builder()
-            .vpToken(transaction.getResponseObject().getVpToken())
-            .presentationSubmission(transaction.getResponseObject().getPresentationSubmission())
+            .response(transaction.getResponseObject())
             .state(transaction.getRequestObject().getState())
             .build();
     }

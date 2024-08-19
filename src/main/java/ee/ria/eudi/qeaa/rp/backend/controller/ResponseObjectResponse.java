@@ -7,7 +7,6 @@ import lombok.Builder;
 @Builder
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public record ResponseObjectResponse(
-    String state,
-    String vpToken,
-    String presentationSubmission) {
+    String response,
+    String state) {
 }
