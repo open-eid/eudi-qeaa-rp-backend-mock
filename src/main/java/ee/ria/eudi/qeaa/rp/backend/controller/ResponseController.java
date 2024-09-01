@@ -2,9 +2,7 @@ package ee.ria.eudi.qeaa.rp.backend.controller;
 
 import ee.ria.eudi.qeaa.rp.backend.configuration.properties.RpBackendProperties;
 import ee.ria.eudi.qeaa.rp.backend.error.ServiceException;
-import ee.ria.eudi.qeaa.rp.backend.model.ResponseCodeResponse;
 import ee.ria.eudi.qeaa.rp.backend.model.ResponseObject;
-import ee.ria.eudi.qeaa.rp.backend.model.ResponseObjectResponse;
 import ee.ria.eudi.qeaa.rp.backend.model.Transaction;
 import ee.ria.eudi.qeaa.rp.backend.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;

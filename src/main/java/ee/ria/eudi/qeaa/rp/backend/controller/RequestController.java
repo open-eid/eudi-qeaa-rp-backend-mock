@@ -4,7 +4,6 @@ import com.nimbusds.jwt.SignedJWT;
 import ee.ria.eudi.qeaa.rp.backend.configuration.properties.RpBackendProperties;
 import ee.ria.eudi.qeaa.rp.backend.error.ServiceException;
 import ee.ria.eudi.qeaa.rp.backend.model.RequestObject;
-import ee.ria.eudi.qeaa.rp.backend.model.RequestObjectResponse;
 import ee.ria.eudi.qeaa.rp.backend.model.Transaction;
 import ee.ria.eudi.qeaa.rp.backend.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;

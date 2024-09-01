@@ -1,4 +1,4 @@
-package ee.ria.eudi.qeaa.rp.backend.model;
+package ee.ria.eudi.qeaa.rp.backend.controller;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
