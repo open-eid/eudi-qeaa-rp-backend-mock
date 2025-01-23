@@ -7,6 +7,7 @@ import ee.ria.eudi.qeaa.rp.backend.model.RequestObject;
 import ee.ria.eudi.qeaa.rp.backend.model.Transaction;
 import ee.ria.eudi.qeaa.rp.backend.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +20,7 @@ import java.text.ParseException;
 import java.time.Instant;
 import java.util.UUID;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class RequestController {
@@ -30,6 +32,7 @@ public class RequestController {
 
     @PostMapping(path = REQUEST_POST_REQUEST_MAPPING, consumes = "application/jws", produces = MediaType.APPLICATION_JSON_VALUE)
     public RequestObjectResponse postRequestObject(@RequestBody String requestObject) throws ParseException {
+        log.debug("Received request object: {}", requestObject);
         Transaction transaction = startTransaction(requestObject);
         return RequestObjectResponse.builder()
             .requestUri(URI.create(rpBackendProperties.baseUrl() + "/request.jwt/" + transaction.getRequestObject().getRequestUriId()))
@@ -41,6 +44,7 @@ public class RequestController {
 
     @GetMapping(path = REQUEST_GET_REQUEST_MAPPING, produces = APPLICATION_OAUTH_AUTHZ_REQ_JWT)
     public String getRequestObject(@PathVariable("requestUriId") String requestUriId) {
+        log.debug("Getting request object for request_uri_id: {}", requestUriId);
         return transactionRepository.findByRequestObjectRequestUriId(requestUriId)
             .map(Transaction::getRequestObject)
             .filter(ro -> ro.getExpiryTime().isAfter(Instant.now()))
@@ -60,6 +64,7 @@ public class RequestController {
             .transactionId(UUID.randomUUID().toString())
             .responseCode(UUID.randomUUID().toString())
             .requestObject(requestObject).build();
+        log.debug("Starting transaction with id {} and response code {}", transaction.getTransactionId(), transaction.getResponseCode());
         transactionRepository.save(transaction);
         return transaction;
     }
